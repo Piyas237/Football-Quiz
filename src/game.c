@@ -17,6 +17,7 @@ void startQuiz(char file[])
     int used[20] = {0};
 
     int cnt = 0;
+    int score = 0;
 
     while (cnt < 10 && cnt < n)
     {
@@ -44,14 +45,16 @@ void startQuiz(char file[])
 
         printf("\nEnter your answer (A/B/C/D): ");
         scanf(" %c", &ans);
-        if(ans == q[r].answer)
+if(ans == q[r].answer)
 {
     printf("\nCorrect!\n");
+    score++;
 }
 else
 {
     printf("\nWrong!\n");
     printf("Correct Answer : %c\n", q[r].answer);
+}
 }
         cnt++;
     }
