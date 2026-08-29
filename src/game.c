@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "game.h"
 #include "questions.h"
@@ -43,19 +44,36 @@ void startQuiz(char file[])
 
         char ans;
 
-        printf("\nEnter your answer (A/B/C/D): ");
-        scanf(" %c", &ans);
-if(ans == q[r].answer)
-{
-    printf("\nCorrect!\n");
-    score++;
-}
-else
-{
-    printf("\nWrong!\n");
-    printf("Correct Answer : %c\n", q[r].answer);
-}
-}
+        while (1)
+        {
+            printf("\nEnter your answer (A/B/C/D): ");
+            scanf(" %c", &ans);
+
+            ans = toupper(ans);
+
+            if (ans == 'A' || ans == 'B' || ans == 'C' || ans == 'D')
+            {
+                break;
+            }
+
+            printf("\nInvalid option! Please enter A, B, C or D.\n");
+        }
+        if(ans == q[r].answer)
+        {
+            printf("\nCorrect!\n");
+            score++;
+        }
+        else
+        {
+            printf("\nWrong!\n");
+            printf("Correct Answer : %c\n", q[r].answer);
+        }
         cnt++;
-    }
-}
+        }
+            printf("\n====================================\n");
+        printf("          QUIZ OVER\n");
+        printf("====================================\n");
+        printf("\nPress Enter to return to the main menu...");
+        getchar();
+        getchar();
+           }
