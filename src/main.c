@@ -29,7 +29,15 @@ void showMenu()
         printf("3. Exit\n");
 
         printf("\nEnter your choice: ");
-        scanf("%d", &ch);
+
+        if (scanf("%d", &ch) != 1)
+        {
+            printf("\nInvalid input! Please enter a number.\n");
+
+            while (getchar() != '\n');
+
+            continue;
+        }
 
         switch (ch)
         {
@@ -65,8 +73,14 @@ void chooseDifficulty()
         printf("4. Back\n");
 
         printf("\nEnter your choice: ");
-        scanf("%d", &ch);
+        if (scanf("%d", &ch) != 1)
+        {
+            printf("\nInvalid input! Please enter a number.\n");
 
+            while (getchar() != '\n');
+
+            continue;
+        }
         switch (ch)
         {
             case 1:

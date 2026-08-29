@@ -70,10 +70,13 @@ void startQuiz(char file[])
         }
         cnt++;
         }
-            printf("\n====================================\n");
-        printf("          QUIZ OVER\n");
-        printf("====================================\n");
-        printf("\nPress Enter to return to the main menu...");
-        getchar();
-        getchar();
-           }
+         printf("\n====================================\n");
+            printf("          QUIZ OVER\n");
+            printf("====================================\n");
+
+            printf("\nFinal Score : %d / 10\n", score);
+
+            printf("\nPress Enter to return to the main menu...");
+            getchar();
+            getchar();
+    }
