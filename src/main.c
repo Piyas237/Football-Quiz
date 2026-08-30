@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "game.h"
+#include "score.h"
 
 void showMenu();
 void chooseDifficulty();
@@ -45,7 +46,12 @@ void showMenu()
                 chooseDifficulty();
                 break;
             case 2:
-                printf("\nHigh Scores Coming Soon...\n");
+                showScores();
+
+                printf("\nPress Enter to return...");
+                getchar();
+                getchar();
+
                 break;
 
             case 3:
@@ -85,17 +91,17 @@ void chooseDifficulty()
         {
             case 1:
                 printf("\nStarting Easy Quiz...\n");
-                startQuiz("data/easy.txt");
+                startQuiz("data/easy.txt", "Easy");
                 return;
 
            case 2:
                 printf("\nStarting Medium Quiz...\n");
-                startQuiz("data/medium.txt");
+                startQuiz("data/medium.txt", "Medium");
                 return;
 
             case 3:
                 printf("\nStarting Hard Quiz...\n");
-                startQuiz("data/hard.txt");
+                startQuiz("data/hard.txt", "Hard");
                 return;
             case 4:
                 return;

@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "score.h"
 #include "game.h"
 #include "questions.h"
 
-void startQuiz(char file[])
+void startQuiz(char file[], char difficulty[])
 {
     Question q[20];
 
@@ -19,6 +20,12 @@ void startQuiz(char file[])
 
     int cnt = 0;
     int score = 0;
+    char name[50];
+
+        printf("Enter your name: ");
+        scanf("%49s", name);
+
+        printf("\nWelcome, %s!\n", name);
 
     while (cnt < 10 && cnt < n)
     {
@@ -75,7 +82,7 @@ void startQuiz(char file[])
             printf("====================================\n");
 
             printf("\nFinal Score : %d / 10\n", score);
-
+            saveScore(name, difficulty, score);
             printf("\nPress Enter to return to the main menu...");
             getchar();
             getchar();
