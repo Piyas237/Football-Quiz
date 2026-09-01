@@ -23,9 +23,8 @@ void showScores()
 {
     FILE *fp;
 
-    char name[50];
-    char difficulty[20];
-    int score;
+    Score s[100];
+    int n = 0;
     fp = fopen("data/highscores.txt", "r");
 
     if(fp == NULL)
@@ -33,20 +32,54 @@ void showScores()
         printf("\nNo high scores found.\n");
         return;
     }
-
-printf("\n=====================================================\n");
-printf("                    HIGH SCORES\n");
-printf("=====================================================\n\n");
-
-printf("%-15s %-12s %-5s\n", "Player", "Difficulty", "Score");
-printf("-----------------------------------------------------\n");
-
-while(fscanf(fp, "%s %s %d", name, difficulty, &score) == 3)
+    while(fscanf(fp, "%s %s %d",
+             s[n].name,
+             s[n].difficulty,
+             &s[n].score) == 3)
 {
-    printf("%-15s %-12s %d/10\n", name, difficulty, score);
+    n++;
+}
+for(int i = 0; i < n - 1; i++)
+{
+    for(int j = 0; j < n - i - 1; j++)
+    {
+        if(s[j].score < s[j + 1].score)
+        {
+            Score temp = s[j];
+            s[j] = s[j + 1];
+            s[j + 1] = temp;
+        }
+    }
+}
+printf("\n=========================================================\n");
+printf("                  TOP 5 HIGH SCORES\n");
+printf("=========================================================\n\n");
+
+printf("%-5s %-15s %-12s %-8s\n",
+       "Rank",
+       "Player",
+       "Difficulty",
+       "Score");
+
+printf("---------------------------------------------------------\n");
+
+int lim = n;
+
+if(lim > 5)
+{
+    lim = 5;
 }
 
-printf("=====================================================\n");
+for(int i = 0; i < lim; i++)
+{
+    printf("#%-4d %-15s %-12s %d/10\n",
+           i + 1,
+           s[i].name,
+           s[i].difficulty,
+           s[i].score);
+}
+
+printf("=========================================================\n");
 
 fclose(fp);
 }

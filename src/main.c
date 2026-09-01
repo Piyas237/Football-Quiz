@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+
+#include "color.h"
 #include "game.h"
 #include "score.h"
 
 void showMenu();
 void chooseDifficulty();
+int chooseTime();
 
 int main()
 {
@@ -22,18 +25,19 @@ void showMenu()
 
     while (1)
     {
-        printf("\n====================================\n");
+        printf(CYAN BOLD "\n====================================\n");
         printf("         FOOTBALL QUIZ\n");
-        printf("====================================\n");
-        printf("1. Start Quiz\n");
-        printf("2. High Scores\n");
-        printf("3. Exit\n");
+        printf("====================================\n" RESET);
 
-        printf("\nEnter your choice: ");
+        printf(GREEN "1." RESET " Start Quiz\n");
+        printf(GREEN "2." RESET " High Scores\n");
+        printf(GREEN "3." RESET " Exit\n");
+
+        printf(BOLD "\nEnter your choice: " RESET);
 
         if (scanf("%d", &ch) != 1)
         {
-            printf("\nInvalid input! Please enter a number.\n");
+            printf(RED "\nInvalid input! Please enter a number.\n" RESET);
 
             while (getchar() != '\n');
 
@@ -45,6 +49,7 @@ void showMenu()
             case 1:
                 chooseDifficulty();
                 break;
+
             case 2:
                 showScores();
 
@@ -55,11 +60,11 @@ void showMenu()
                 break;
 
             case 3:
-                printf("\nThanks for playing!\n");
+                printf(CYAN "\nThanks for playing!\n" RESET);
                 return;
 
             default:
-                printf("\nInvalid Choice!\n");
+                printf(RED "\nInvalid Choice!\n" RESET);
         }
     }
 }
@@ -70,44 +75,143 @@ void chooseDifficulty()
 
     while (1)
     {
-        printf("\n====================================\n");
+        printf(CYAN BOLD "\n====================================\n");
         printf("      SELECT DIFFICULTY\n");
-        printf("====================================\n");
-        printf("1. Easy\n");
-        printf("2. Medium\n");
-        printf("3. Hard\n");
-        printf("4. Back\n");
+        printf("====================================\n" RESET);
 
-        printf("\nEnter your choice: ");
+        printf(GREEN "1." RESET " Easy\n");
+        printf(GREEN "2." RESET " Medium\n");
+        printf(GREEN "3." RESET " Hard\n");
+        printf(GREEN "4." RESET " Back\n");
+
+        printf(BOLD "\nEnter your choice: " RESET);
+
         if (scanf("%d", &ch) != 1)
         {
-            printf("\nInvalid input! Please enter a number.\n");
+            printf(RED "\nInvalid input! Please enter a number.\n" RESET);
 
             while (getchar() != '\n');
 
             continue;
         }
+
         switch (ch)
         {
             case 1:
-                printf("\nStarting Easy Quiz...\n");
-                startQuiz("data/easy.txt", "Easy");
-                return;
+            {
+                int t = chooseTime();
 
-           case 2:
-                printf("\nStarting Medium Quiz...\n");
-                startQuiz("data/medium.txt", "Medium");
+                if (t == 0)
+                    break;
+
+                printf(GREEN "\nStarting Easy Quiz...\n" RESET);
+                startQuiz("data/easy.txt", "Easy", t);
                 return;
+            }
+
+            case 2:
+            {
+                int t = chooseTime();
+
+                if (t == 0)
+                    break;
+
+                printf(GREEN "\nStarting Medium Quiz...\n" RESET);
+                startQuiz("data/medium.txt", "Medium", t);
+                return;
+            }
 
             case 3:
-                printf("\nStarting Hard Quiz...\n");
-                startQuiz("data/hard.txt", "Hard");
+            {
+                int t = chooseTime();
+
+                if (t == 0)
+                    break;
+
+                printf(GREEN "\nStarting Hard Quiz...\n" RESET);
+                startQuiz("data/hard.txt", "Hard", t);
                 return;
+            }
+
             case 4:
                 return;
 
             default:
-                printf("\nInvalid Choice!\n");
+                printf(RED "\nInvalid Choice!\n" RESET);
+        }
+    }
+}
+
+int chooseTime()
+{
+    int ch, t;
+
+    while (1)
+    {
+        printf(CYAN BOLD "\n====================================\n");
+        printf("         SELECT TIME\n");
+        printf("====================================\n" RESET);
+
+        printf(GREEN "1." RESET " 15 Seconds\n");
+        printf(GREEN "2." RESET " 30 Seconds\n");
+        printf(GREEN "3." RESET " 45 Seconds\n");
+        printf(GREEN "4." RESET " 60 Seconds\n");
+        printf(GREEN "5." RESET " Custom\n");
+        printf(GREEN "6." RESET " Back\n");
+
+        printf(BOLD "\nEnter your choice: " RESET);
+
+        if (scanf("%d", &ch) != 1)
+        {
+            printf(RED "\nInvalid input! Please enter a number.\n" RESET);
+
+            while (getchar() != '\n');
+
+            continue;
+        }
+
+        switch (ch)
+        {
+            case 1:
+                return 15;
+
+            case 2:
+                return 30;
+
+            case 3:
+                return 45;
+
+            case 4:
+                return 60;
+
+            case 5:
+
+                while (1)
+                {
+                    printf(BOLD "\nEnter time in seconds (5 - 120): " RESET);
+
+                    if (scanf("%d", &t) != 1)
+                    {
+                        printf(RED "\nInvalid input!\n" RESET);
+
+                        while (getchar() != '\n');
+
+                        continue;
+                    }
+
+                    if (t >= 5 && t <= 120)
+                    {
+                        return t;
+                    }
+
+                    printf(YELLOW "\nPlease enter a value between 5 and 120.\n" RESET);
+                }
+
+            case 6:
+                return 0;
+
+            default:
+                printf(RED "\nInvalid Choice!\n" RESET);
         }
     }
 }
