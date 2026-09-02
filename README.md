@@ -6,7 +6,7 @@
 
 ### Difficulty Selection
 
-![Difficulty](assets/difficulty.png)
+![Difficulty](assets/select-difficulty.png)
 
 ### Time Selection
 
