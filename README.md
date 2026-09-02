@@ -1,3 +1,29 @@
+## 🚀 Installation
+
+### Requirements
+
+- Windows
+- GCC (MinGW)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Piyas237/Football-Quiz.git
+cd Football-Quiz
+```
+
+### Compile
+
+```bash
+gcc src/*.c -Iinclude -o footballquiz.exe
+```
+
+### Run
+
+```bash
+footballquiz.exe
+```
+
 ## 📷 Preview
 
 ### Main Menu
