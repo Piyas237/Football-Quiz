@@ -15,7 +15,7 @@ cd Football-Quiz
 ### Compile
 
 ```bash
-gcc src/*.c -Iinclude -o footballquiz.exe
+gcc src/*.c -Iinclude -Wall -Wextra -o footballquiz.exe
 ```
 
 ### Run

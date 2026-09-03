@@ -1,6 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
+#include <windows.h>
 
 #include "color.h"
 #include "game.h"
@@ -10,8 +11,23 @@ void showMenu();
 void chooseDifficulty();
 int chooseTime();
 
+
+void enableANSI()
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    DWORD mode;
+
+    GetConsoleMode(h, &mode);
+
+    mode |= 0x0004;
+
+    SetConsoleMode(h, mode);
+}
 int main()
 {
+    enableANSI();
+
     srand(time(NULL));
 
     showMenu();

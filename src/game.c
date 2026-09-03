@@ -104,28 +104,34 @@ done:
         printf("\r                     \r");
 
         if(ans == 'X')
-        {
-            Beep(600,300);
+{
+    Beep(600, 300);
 
-            printf(YELLOW "\nTime's Up!\n" RESET);
-            printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
-        }
-        else if(ans == q[r].answer)
-        {
-            Beep(1000,150);
+    printf(YELLOW "\nTime's Up!\n" RESET);
+    printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
+}
+else if(ans == q[r].answer)
+{
+    Beep(1000, 150);
+    printf(GREEN "\nCorrect!\n" RESET);
+    score++;
+}
+else
+{
+    Beep(400, 300);
+    printf(RED "\nWrong!\n" RESET);
+    printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
+}
 
-            printf(GREEN "\nCorrect!\n" RESET);
-            score++;
-        }
-        else
-        {
-            Beep(400,300);
+cnt++;
 
-            printf(RED "\nWrong!\n" RESET);
-            printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
-        }
+if(cnt < 10 && cnt < n)
+{
+    printf(CYAN "\nPress Enter for the next question..." RESET);
 
-        cnt++;
+    while(getchar() != '\n');
+    getchar();
+}
     }
 
     int cor = score;
