@@ -299,7 +299,7 @@ This project was developed as a first-year Computer Science project to practice:
 
 ## Author
 
-Piyas Sen
+Piyas Sur
 
 GitHub:
 https://github.com/Piyas237
