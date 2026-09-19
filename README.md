@@ -245,6 +245,14 @@ This project was developed as a first-year Computer Science project to practice:
 
 ---
 
+## Author
+
+Piyas Sen
+
+GitHub:
+https://github.com/Piyas237
+
+
 # 📜 License
 
 This project is released under the **MIT License**.
