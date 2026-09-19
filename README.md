@@ -114,6 +114,58 @@ A feature-rich football quiz game developed in **C** for Windows. Test your foot
 - time.h
 
 ---
+## 📥 Downloading & Running
+
+### Option 1 — Download ZIP (Recommended)
+
+1. Click the green **Code** button.
+2. Select **Download ZIP**.
+3. Extract the downloaded ZIP file.
+4. Open the extracted folder.
+5. Double-click **footballquiz.exe** to start the game.
+
+> **Important:**  
+> Do not move `footballquiz.exe` outside the project folder.
+> The `data` and `sounds` folders must remain in the same directory as the executable.
+
+---
+
+### Option 2 — Clone the Repository
+
+If you have Git installed:
+
+```bash
+git clone https://github.com/Piyas237/Football-Quiz.git
+```
+
+Open the project folder and run:
+
+```bash
+build.bat
+```
+
+This will automatically compile the project and create:
+
+```
+footballquiz.exe
+```
+
+---
+
+### Folder Structure
+
+```
+Football-Quiz/
+│
+├── footballquiz.exe
+├── build.bat
+├── data/
+├── sounds/
+├── assets/
+├── include/
+├── src/
+└── README.md
+```
 
 # 📂 Project Structure
 
