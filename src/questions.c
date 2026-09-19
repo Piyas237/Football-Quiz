@@ -17,18 +17,18 @@ int loadQuestions(char filename[], Question q[])
 
     int i = 0;
 
-    while(
-        fscanf(fp,
+    while(i < 50 &&
+      fscanf(fp,
 "%199[^|]|%99[^|]|%99[^|]|%99[^|]|%99[^|]|%c\n",
-        q[i].question,
-        q[i].optionA,
-        q[i].optionB,
-        q[i].optionC,
-        q[i].optionD,
-        &q[i].answer)==6)
-    {
-        i++;
-    }
+      q[i].question,
+      q[i].optionA,
+      q[i].optionB,
+      q[i].optionC,
+      q[i].optionD,
+      &q[i].answer) == 6)
+{
+    i++;
+}
 
     fclose(fp);
 

@@ -3,21 +3,155 @@
 #include <windows.h>
 #include <conio.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "game.h"
 #include "questions.h"
 #include "score.h"
 #include "color.h"
+#include "ui.h"
+#include "sound.h"
 
+void swapStr(char a[], char b[])
+{
+    char t[100];
+
+    strcpy(t, a);
+    strcpy(a, b);
+    strcpy(b, t);
+}
+void shuffleOptions(Question *q)
+{
+    char op[4][100];
+    char pos[4];
+    char tmp[100];
+    char ch;
+
+    int i, j;
+
+    strcpy(op[0], q->optionA);
+    strcpy(op[1], q->optionB);
+    strcpy(op[2], q->optionC);
+    strcpy(op[3], q->optionD);
+
+    pos[0] = 'A';
+    pos[1] = 'B';
+    pos[2] = 'C';
+    pos[3] = 'D';
+
+    for(i = 3; i > 0; i--)
+    {
+        j = rand() % (i + 1);
+
+        strcpy(tmp, op[i]);
+        strcpy(op[i], op[j]);
+        strcpy(op[j], tmp);
+
+        ch = pos[i];
+        pos[i] = pos[j];
+        pos[j] = ch;
+    }
+
+    strcpy(q->optionA, op[0]);
+    strcpy(q->optionB, op[1]);
+    strcpy(q->optionC, op[2]);
+    strcpy(q->optionD, op[3]);
+
+    for(i = 0; i < 4; i++)
+    {
+        if(pos[i] == q->answer)
+        {
+            q->answer = 'A' + i;
+            break;
+        }
+    }
+}
+void showQuestion(Question q[], int r, int no)
+{
+    char t[30];
+
+    clearScreen();
+
+    sprintf(t, "QUESTION %d", no);
+
+    drawTitle(t);
+
+    printf("\n");
+
+    printf(BOLD "%s\n\n" RESET, q[r].question);
+
+    printf(CYAN "A. " RESET "%s\n", q[r].optionA);
+    printf(CYAN "B. " RESET "%s\n", q[r].optionB);
+    printf(CYAN "C. " RESET "%s\n", q[r].optionC);
+    printf(CYAN "D. " RESET "%s\n", q[r].optionD);
+
+    printf("\nPress A/B/C/D to answer\n");
+    printf("Press Space to Pause\n\n");
+}
+void showCorrectAnswer(Question *q)
+{
+    switch(q->answer)
+    {
+        case 'A':
+            printf(YELLOW "Correct Answer : A. %s\n" RESET, q->optionA);
+            break;
+
+        case 'B':
+            printf(YELLOW "Correct Answer : B. %s\n" RESET, q->optionB);
+            break;
+
+        case 'C':
+            printf(YELLOW "Correct Answer : C. %s\n" RESET, q->optionC);
+            break;
+
+        case 'D':
+            printf(YELLOW "Correct Answer : D. %s\n" RESET, q->optionD);
+            break;
+    }
+}
+void playAnswerSound(char ans, char correct)
+{
+    if(ans == 'X')
+    {
+        playTimeout();
+    }
+    else if(ans == correct)
+    {
+        playCorrect();
+    }
+    else
+    {
+        playWrong();
+    }
+}
+void showResult(Question *q, char ans, int *score)
+{
+    playAnswerSound(ans, q->answer);
+
+    if(ans == 'X')
+    {
+        printf(YELLOW "\nTime's Up!\n" RESET);
+        showCorrectAnswer(q);
+    }
+    else if(ans == q->answer)
+    {
+        printf(GREEN "\nCorrect!\n" RESET);
+        (*score)++;
+    }
+    else
+    {
+        printf(RED "\nWrong!\n" RESET);
+        showCorrectAnswer(q);
+    }
+}
 void startQuiz(char file[], char difficulty[], int timeLimit)
 {
-    Question q[20];
+    Question q[50];
 
     int n = loadQuestions(file, q);
 
-    printf(CYAN "\n====================================\n");
-    printf("         QUIZ SETTINGS\n");
-    printf("====================================\n\n" RESET);
+   drawTitle("QUIZ SETTINGS");
+   printf("\n");
 
     printf("Difficulty        : %s\n", difficulty);
     printf("Questions         : 10\n");
@@ -26,17 +160,20 @@ void startQuiz(char file[], char difficulty[], int timeLimit)
     printf("\nPress Enter to Start...");
     getchar();
     getchar();
+    PlaySound("sounds\\click.wav",
+          NULL,
+          SND_FILENAME | SND_ASYNC);
 
-    int used[20] = {0};
+    int used[50] = {0};
     int cnt = 0;
     int score = 0;
     char name[50];
 
-    printf("Enter your name: ");
-    scanf("%49s", name);
+            printf("Enter your name: ");
 
-    Beep(900,100);
-    Beep(1100,100);
+        fgets(name, sizeof(name), stdin);
+
+        name[strcspn(name, "\n")] = '\0';
 
     printf(GREEN "\nWelcome, %s!\n\n" RESET, name);
 
@@ -48,102 +185,102 @@ void startQuiz(char file[], char difficulty[], int timeLimit)
             continue;
 
         used[r] = 1;
+        shuffleOptions(&q[r]);
 
-        printf(CYAN "\n====================================\n");
-        printf("Question %d\n", cnt + 1);
-        printf("====================================\n" RESET);
-
-        printf(BOLD "%s\n\n" RESET, q[r].question);
-
-        printf(CYAN "A. " RESET "%s\n", q[r].optionA);
-        printf(CYAN "B. " RESET "%s\n", q[r].optionB);
-        printf(CYAN "C. " RESET "%s\n", q[r].optionC);
-        printf(CYAN "D. " RESET "%s\n", q[r].optionD);
-
+        showQuestion(q, r, cnt + 1);
         char ans = 'X';
 
-        printf("\nPress A/B/C/D before time runs out!\n");
+for(int t = timeLimit; t >= 1; t--)
+{
+    printf(YELLOW "\rTime Left: %2d " RESET, t);
+    fflush(stdout);
 
-        for(int t = timeLimit; t >= 1; t--)
+    for(int i = 0; i < 10; i++)
+    {
+        Sleep(100);
+
+        if(kbhit())
         {
-            printf(YELLOW "\rTime Left: %2d " RESET, t);
+            ans = getch();
 
-            if(t == 5)
-                Beep(700,80);
-            else if(t == 4)
-                Beep(800,80);
-            else if(t == 3)
-                Beep(900,80);
-            else if(t == 2)
-                Beep(1000,80);
-            else if(t == 1)
-                Beep(1200,100);
-
-            fflush(stdout);
-
-            for(int i = 0; i < 10; i++)
+            if(ans == ' ')
             {
-                Sleep(100);
+                PlaySound("sounds\\pause-resume.wav",
+                          NULL,
+                          SND_FILENAME | SND_ASYNC);
 
-                if(kbhit())
+                clearScreen();
+
+                drawTitle("PAUSED");
+
+                printf("\n");
+                printf("Difficulty : %s\n", difficulty);
+                printf("Question   : %d / 10\n", cnt + 1);
+                printf("Time Left  : %d Seconds\n", t);
+
+                printf("\nPress Space to Resume...");
+
+                while(1)
                 {
-                    ans = toupper(getch());
-
-                    if(ans == 'A' || ans == 'B' || ans == 'C' || ans == 'D')
+                    if(kbhit())
                     {
-                        printf("\r                     \r");
-                        printf("You answered: %c\n", ans);
-                        goto done;
+                        if(getch() == ' ')
+                        {
+                            PlaySound("sounds\\pause-resume.wav",
+                                      NULL,
+                                      SND_FILENAME | SND_ASYNC);
+                            break;
+                        }
                     }
+
+                    Sleep(100);
                 }
+
+                showQuestion(q, r, cnt + 1);
+
+                printf(YELLOW "\rTime Left: %2d " RESET, t);
+                fflush(stdout);
+
+                continue;
+            }
+
+            ans = toupper(ans);
+
+            if(ans == 'A' || ans == 'B' || ans == 'C' || ans == 'D')
+            {
+                printf("\r                     \r");
+                printf("You answered: %c\n", ans);
+                goto done;
             }
         }
+    }
+}
+
+ans = 'X';
 
 done:
-
         printf("\r                     \r");
 
-        if(ans == 'X')
-{
-    Beep(600, 300);
-
-    printf(YELLOW "\nTime's Up!\n" RESET);
-    printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
-}
-else if(ans == q[r].answer)
-{
-    Beep(1000, 150);
-    printf(GREEN "\nCorrect!\n" RESET);
-    score++;
-}
-else
-{
-    Beep(400, 300);
-    printf(RED "\nWrong!\n" RESET);
-    printf(YELLOW "Correct Answer : %c\n" RESET, q[r].answer);
-}
+        showResult(&q[r], ans, &score);
 
 cnt++;
 
 if(cnt < 10 && cnt < n)
 {
     printf(CYAN "\nPress Enter for the next question..." RESET);
-
-    while(getchar() != '\n');
-    getchar();
+getchar();
+        PlaySound("sounds\\click.wav",
+                NULL,
+                SND_FILENAME | SND_ASYNC);
 }
     }
-
+    clearScreen();
     int cor = score;
     int wr = 10 - score;
     double acc = score * 100.0 / 10;
 
-    Beep(800,120);
-    Beep(600,120);
-
-    printf(CYAN "\n====================================\n");
-    printf("           QUIZ OVER\n");
-    printf("====================================\n\n" RESET);
+    drawTitle("QUIZ OVER");
+    printf("\n");
 
     printf(BOLD "Player          : %s\n" RESET, name);
     printf(BOLD "Difficulty      : %s\n" RESET, difficulty);
@@ -153,28 +290,44 @@ if(cnt < 10 && cnt < n)
     printf(BOLD "Wrong Answers   : %d\n" RESET, wr);
     printf(BOLD "Accuracy        : %.0f%%\n" RESET, acc);
 
-    printf(GREEN "\nFinal Score     : %d / 10\n" RESET, score);
+        printf(GREEN "\nFinal Score     : %d / 10\n" RESET, score);
 
-    printf("\n");
+        printf("\n");
 
-    if(score == 10)
-    {
-        Beep(700,150);
-        Beep(900,150);
-        Beep(1100,200);
-        Beep(1400,400);
+        stopMusic();
+                if(score == 10)
+        {
+            playFanfare();
+            playCheering();
 
-        printf(MAGENTA BOLD "*** PERFECT SCORE ***\n" RESET);
-        printf(GREEN "You are a Football Genius!\n" RESET);
-    }
-    else if(score >= 8)
-    {
-        printf(GREEN "[EXCELLENT] Great Job!\n" RESET);
-    }
-    else if(score >= 6)
-    {
-        printf(CYAN "[GOOD] Nice Work!\n" RESET);
-    }
+            printf(CYAN);
+            printf("\n");
+            printf("****************************************\n");
+            printf("* * * * * * * * * * * * * * * * * * * *\n");
+            printf("*                                      *\n");
+            printf("*         CONGRATULATIONS!             *\n");
+            printf("*                                      *\n");
+            printf("* * * * * * * * * * * * * * * * * * * *\n");
+            printf("****************************************\n");
+            printf(RESET);
+
+            printf(MAGENTA BOLD "\n*** PERFECT SCORE ***\n" RESET);
+            printf(GREEN "You are a Football Genius!\n" RESET);
+        }
+                else if(score >= 8)
+            {
+            playCelebration();
+            playApplause();
+
+                printf(GREEN "[EXCELLENT] Great Job!\n" RESET);
+            }
+                else if(score >= 6)
+            {
+                playShortFanfare();
+                playShortApplause();
+
+                printf(CYAN "[GOOD] Nice Work!\n" RESET);
+            }
     else if(score >= 4)
     {
         printf(YELLOW "[KEEP GOING] Keep Practicing!\n" RESET);
@@ -184,9 +337,15 @@ if(cnt < 10 && cnt < n)
         printf(RED "[TRY AGAIN] Better Luck Next Time!\n" RESET);
     }
 
-    saveScore(name, difficulty, score);
+            saveScore(name, difficulty, score);
 
-    printf("\nPress Enter to return to the main menu...");
-    getchar();
-    getchar();
+            printf("\nPress Enter to return to the main menu...");
+            getchar();
+            getchar();
+
+            startMusic();      // Restart background music
+
+
 }
+
+    

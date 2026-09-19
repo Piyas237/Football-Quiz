@@ -6,6 +6,8 @@
 #include "color.h"
 #include "game.h"
 #include "score.h"
+#include "ui.h"
+#include "sound.h"
 
 void showMenu();
 void chooseDifficulty();
@@ -30,7 +32,11 @@ int main()
 
     srand(time(NULL));
 
+    startMusic();
+
     showMenu();
+
+    stopMusic();
 
     return 0;
 }
@@ -41,16 +47,16 @@ void showMenu()
 
     while (1)
     {
-        printf(CYAN BOLD "\n====================================\n");
-        printf("         FOOTBALL QUIZ\n");
-        printf("====================================\n" RESET);
+        clearScreen();
+        drawTitle("FOOTBALL QUIZ");
+        printf("\n");
+        printf("\n");
 
         printf(GREEN "1." RESET " Start Quiz\n");
         printf(GREEN "2." RESET " High Scores\n");
         printf(GREEN "3." RESET " Exit\n");
 
         printf(BOLD "\nEnter your choice: " RESET);
-
         if (scanf("%d", &ch) != 1)
         {
             printf(RED "\nInvalid input! Please enter a number.\n" RESET);
@@ -62,25 +68,31 @@ void showMenu()
 
         switch (ch)
         {
-            case 1:
+                        case 1:
+                PlaySound("sounds\\click.wav",
+                        NULL,
+                        SND_FILENAME | SND_ASYNC);
+
                 chooseDifficulty();
                 break;
 
-            case 2:
+                        case 2:
+                PlaySound("sounds\\click.wav",
+                        NULL,
+                        SND_FILENAME | SND_ASYNC);
+
                 showScores();
-
-                printf("\nPress Enter to return...");
-                getchar();
-                getchar();
-
+                pauseScreen();
                 break;
 
-            case 3:
-                printf(CYAN "\nThanks for playing!\n" RESET);
-                return;
+                                case 3:
+            PlaySound("sounds\\click.wav",
+                    NULL,
+                    SND_FILENAME | SND_ASYNC);
 
-            default:
-                printf(RED "\nInvalid Choice!\n" RESET);
+
+            printf(CYAN "\nThanks for playing!\n" RESET);
+            return;
         }
     }
 }
@@ -91,17 +103,16 @@ void chooseDifficulty()
 
     while (1)
     {
-        printf(CYAN BOLD "\n====================================\n");
-        printf("      SELECT DIFFICULTY\n");
-        printf("====================================\n" RESET);
-
-        printf(GREEN "1." RESET " Easy\n");
-        printf(GREEN "2." RESET " Medium\n");
-        printf(GREEN "3." RESET " Hard\n");
-        printf(GREEN "4." RESET " Back\n");
-
-        printf(BOLD "\nEnter your choice: " RESET);
-
+       printf(CYAN BOLD);
+printf("+======================================+\n");
+printf("|        SELECT DIFFICULTY             |\n");
+printf("+======================================+\n\n");
+printf(RESET);
+       printf(GREEN "1." RESET " Easy\n"); 
+       printf(GREEN "2." RESET " Medium\n"); 
+       printf(GREEN "3." RESET " Hard\n"); 
+       printf(GREEN "4." RESET " Back\n"); 
+       printf(BOLD "\nEnter your choice: " RESET);
         if (scanf("%d", &ch) != 1)
         {
             printf(RED "\nInvalid input! Please enter a number.\n" RESET);
@@ -114,42 +125,66 @@ void chooseDifficulty()
         switch (ch)
         {
             case 1:
-            {
-                int t = chooseTime();
+{
+    PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
+
+    int t = chooseTime();
 
                 if (t == 0)
                     break;
 
                 printf(GREEN "\nStarting Easy Quiz...\n" RESET);
+                        PlaySound("sounds\\click.wav",
+                NULL,
+                SND_FILENAME | SND_ASYNC);
                 startQuiz("data/easy.txt", "Easy", t);
                 return;
             }
 
             case 2:
-            {
-                int t = chooseTime();
+{
+    PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
+
+    int t = chooseTime();
 
                 if (t == 0)
                     break;
 
                 printf(GREEN "\nStarting Medium Quiz...\n" RESET);
+                          PlaySound("sounds\\click.wav",
+                NULL,
+                SND_FILENAME | SND_ASYNC);
                 startQuiz("data/medium.txt", "Medium", t);
                 return;
             }
 
-            case 3:
-            {
-                int t = chooseTime();
+           case 3:
+{
+    PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
+
+    int t = chooseTime();
 
                 if (t == 0)
                     break;
 
                 printf(GREEN "\nStarting Hard Quiz...\n" RESET);
+                          PlaySound("sounds\\click.wav",
+                NULL,
+                SND_FILENAME | SND_ASYNC);
                 startQuiz("data/hard.txt", "Hard", t);
                 return;
             }
 
             case 4:
+                      PlaySound("sounds\\click.wav",
+                NULL,
+                SND_FILENAME | SND_ASYNC);
                 return;
 
             default:
@@ -164,10 +199,12 @@ int chooseTime()
 
     while (1)
     {
-        printf(CYAN BOLD "\n====================================\n");
-        printf("         SELECT TIME\n");
-        printf("====================================\n" RESET);
-
+        clearScreen();
+        printf(CYAN BOLD);
+        printf("+======================================+\n");
+        printf("|           SELECT TIME                |\n");
+        printf("+======================================+\n\n");
+        printf(RESET);
         printf(GREEN "1." RESET " 15 Seconds\n");
         printf(GREEN "2." RESET " 30 Seconds\n");
         printf(GREEN "3." RESET " 45 Seconds\n");
@@ -189,15 +226,27 @@ int chooseTime()
         switch (ch)
         {
             case 1:
+            PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
                 return 15;
 
             case 2:
+            PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
                 return 30;
 
             case 3:
+            PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
                 return 45;
 
             case 4:
+            PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
                 return 60;
 
             case 5:
@@ -217,6 +266,10 @@ int chooseTime()
 
                     if (t >= 5 && t <= 120)
                     {
+                                    PlaySound("sounds\\click.wav",
+                        NULL,
+                        SND_FILENAME | SND_ASYNC);
+
                         return t;
                     }
 
@@ -224,6 +277,9 @@ int chooseTime()
                 }
 
             case 6:
+            PlaySound("sounds\\click.wav",
+              NULL,
+              SND_FILENAME | SND_ASYNC);
                 return 0;
 
             default:
