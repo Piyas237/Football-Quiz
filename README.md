@@ -8,6 +8,11 @@ A feature-rich football quiz game developed in **C** for Windows. Test your foot
 
 ---
 
+![Language](https://img.shields.io/badge/Language-C-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows-success)
+![Compiler](https://img.shields.io/badge/Compiler-MinGW64-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 # ✨ Features
 
 - ⚽ 60 Football Questions (20 Easy, 20 Medium, 20 Hard)
